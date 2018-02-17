@@ -20,12 +20,13 @@ class classifier:
 		self.trainlist = trainlist
 		for every in self.trainlist:
 			every.pop(0)
+
 	def test(self,ls):
 		result = 0
 		for i in range(0,2001,1):
 			#100 for random subset from the dataset
 			treelist = []
-			treelist = random.sample(self.trainlist,10)
+			treelist = random.sample(self.trainlist,100)
 			copied = []
 			copied = copy.deepcopy(treelist)
 			treeresult = []
@@ -33,11 +34,34 @@ class classifier:
 				ans = one.pop()
 				treeresult.append(ans)
 			clf = tree.DecisionTreeClassifier()
+
+			#Converting the input data into int
+			arr=[]
+			for element in copied:
+				arr2 = []
+				for elements in element:
+					elements = int(float(elements))
+					arr2.append(elements)
+				arr.append(arr2)
+			copied = arr
+			#Done changing float to int part
+			#Starting converting treeresult part
+			arr = []
+			for element in treeresult:
+				element = int(float(element))
+				arr.append(element)
+			treeresult = arr
+			#Done changing float to int part
 			clf = clf.fit(copied,treeresult)
-			#Error in this line, some thing about the shape of the predicting ones
+			#Now we are changing datatype of testting part
 			ls = np.asarray(ls)
-			
-			result+= clf.predict(ls)
+			arr = []
+			for element in ls:
+				element = int(float(element))
+				arr.append(element)
+			arr2 = []
+			arr2.append(arr)
+			result+= clf.predict(arr2)
 		return result
 
 
