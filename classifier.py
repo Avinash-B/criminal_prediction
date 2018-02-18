@@ -76,14 +76,18 @@ if __name__ == "__main__":
 		trainlist = list(traindata)
 		del trainlist[0]
 		forest = classifier(trainlist)
-		with open('criminal_test.csv') as testfile:
-			testdata = csv.reader(testfile)
-			testlist = list(testdata)
-			del testlist[0]
-			for element in testlist:
-				PERID = element.pop(0)
-				result = forest.test(element)
-				if result>1000:
-					print str(PERID)+" "+str(1)
-				else:
-					print str(PERID)+" "+str(0)
+		with open('submission.csv','w') as writefile:
+			writer = csv.writer(writefile)
+			writer.writerow(['PERID','Criminal'])
+			with open('criminal_test.csv') as testfile:
+				testdata = csv.reader(testfile)
+				testlist = list(testdata)
+				del testlist[0]
+				for element in testlist:
+					PERID = element.pop(0)
+					result = forest.test(element)
+					if result>=1000:
+						result = 1
+					else:
+						result = 0
+					writer.writerow([''+str(PERID),''+str(result)])
